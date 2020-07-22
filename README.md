@@ -1,2 +1,2 @@
 # Felicity
-Medicaal Image Processing Software
+Medical Image Processing Software
