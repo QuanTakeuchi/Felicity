@@ -1,0 +1,51 @@
+<DrawingWidget>:
+    canvas:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            id: rect
+            pos: self.pos
+            size: (300, 300)
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserIconView:
+            id: filechooser
+            dirselect: True
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
+
+<ActionBar>:
+    ActionView:
+        use_seperator: True
+        ActionPrevious:
+            title: 'Felicity'
+            with_previous: False
+        ActionGroup:
+            text: 'File'
+            mode: 'spinner'
+            ActionButton:
+                text: 'Load'
+                on_release: app.load_file_menu()
+            ActionButton:
+                text: 'Save'
+
+<Interface>:
+    orientation: 'vertical'
+    ActionBar:
+    DrawingWidget:
+        id: draw_widget
+
+
