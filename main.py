@@ -13,6 +13,10 @@ from kivy.graphics.texture import Texture
 from random import random
 from array import array
 
+from PIL import Image
+
+import io
+
 class LoadDialog(FloatLayout):
     load = ObjectProperty(None)
     cancel = ObjectProperty(None)
@@ -25,16 +29,19 @@ class DrawingWidget(Widget):
     def on_touch_down(self, touch):
         super(DrawingWidget, self).on_touch_down(touch)
 
-        size = 300 * 300 * 3
-        buf = [int(x * 255 / size) for x in range(size)]
-        arr = array('B', buf)
-        texture = Texture.create(size=(300, 300))
-        texture.blit_buffer(arr, colorfmt='rgb', bufferfmt='ubyte')
-        arr[24] = arr[50] = 99
+        img = Image.open('lena.png')
+        width, height = img.size
 
+        imgArr = list(img.getdata())
+        imgArr = [int(i[0]) for i in imgArr for ch in range(3)]
+        
+        arr = array('B', imgArr)
+        texture = Texture.create(size=(width, height))
+        texture.blit_buffer(arr, colorfmt='rgb',
+                            bufferfmt='ubyte')
 
-        with self.canvas:
-            Rectangle(texture=texture, pos=self.pos, size=(300, 300))
+        # with self.canvas:
+        #     Rectangle(texture=texture, pos=self.pos, size=(width, height))
 
     # def on_touch_down(self, touch):
     #     super(DrawingWidget, self).on_touch_down(touch)
@@ -69,17 +76,32 @@ class FelicityApp(App):
         self._popup.open()
 
     def load(self, path, filename):
-        size = 300 * 300 * 3
-        buf = [int(x * 255 / size) for x in range(size)]
-        # initialize the array with the buffer values
-        arr = array('B', buf)
-        # now blit the array
-        texture = Texture.create(size=(300, 300))
-        texture.blit_buffer(arr, colorfmt='rgb', bufferfmt='ubyte')
+        print(path)
+        print(filename)
+        img = Image.open(filename[0])
+        width, height = img.size
+
+        imgArr = list(img.getdata())
+        imgArr = [int(i[0]) for i in imgArr for ch in range(3)]
+        
+        arr = array('B', imgArr)
+        texture = Texture.create(size=(width, height))
+        texture.blit_buffer(arr, colorfmt='rgb',
+                            bufferfmt='ubyte')
+
+        # with self.canvas:
+        #     Rectangle(texture=texture, pos=self.pos, size=(width, height))
+
+        # size = 300 * 300 * 3
+        # buf = [int(x * 255 / size) for x in range(size)]
+        # # initialize the array with the buffer values
+        # arr = array('B', buf)
+        # # now blit the array
+        # texture = Texture.create(size=(300, 300))
+        # texture.blit_buffer(arr, colorfmt='rgb', bufferfmt='ubyte')
         # now change some elements in the original array
-        arr[24] = arr[50] = 99
         self.root.ids.draw_widget.rect = Rectangle(texture=texture,
-                                                   size=(400, 400))
+                                                   size=(width, height))
                 
         self.dismiss_popup()
 
