@@ -8,6 +8,7 @@
             size: (300, 300)
 
 <LoadDialog>:
+    defaultPath: '.'
     BoxLayout:
         size: root.size
         pos: root.pos
@@ -15,6 +16,7 @@
         FileChooserIconView:
             id: filechooser
             dirselect: True
+            path: root.defaultPath
 
         BoxLayout:
             size_hint_y: None
