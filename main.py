@@ -3,6 +3,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.slider import Slider
 from kivy.uix.popup import Popup
 from kivy.uix.scatter import Scatter
@@ -13,6 +14,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.graphics.texture import Texture
 from random import random
 from array import array
+
+import draw
 
 from PIL import Image
 
@@ -41,9 +44,7 @@ class ResizableLayout(Scatter):
 
             
 class DrawingWidget(Widget):
-    target_colour_rgb = ListProperty([0, 0, 0])
-    rectProperty = ObjectProperty()
-
+    bgColor = ListProperty([1, 0, 0, 1])
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
@@ -51,9 +52,6 @@ class DrawingWidget(Widget):
     def update(self, texture, width, height):
         with self.ids.layout.canvas:
             Rectangle(texture=texture, pos=self.pos, size=(width, height))
-
-    def on_touch_down(self, touch):
-        super(DrawingWidget, self).on_touch_down(touch)
 
 class Interface(BoxLayout):
     pass
@@ -78,14 +76,13 @@ class FelicityApp(App):
         width, height = img.size
 
         imgArr = list(img.getdata())
-        imgArr = [int(i[0]) for i in imgArr for ch in range(3)]
+        imgArr = [int(i[0]) for i in reversed(imgArr) for ch in range(3)]
         
         arr = array('B', imgArr)
         texture = Texture.create(size=(width, height))
-        texture.blit_buffer(arr, colorfmt='rgb',
-                            bufferfmt='ubyte')
+        texture.blit_buffer(arr, colorfmt='rgb', bufferfmt='ubyte')
 
-        self.root.ids.draw_widget.update(texture, width, height)
+        self.root.ids.draw_widget_left.update(texture, width, height)
         self.dismiss_popup()
 
     def dismiss_popup(self):

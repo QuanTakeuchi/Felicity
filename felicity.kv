@@ -1,13 +1,28 @@
-<DrawingWidget>:
-    ResizableLayout:
-        id: layout
+<Draw>:
+    size: self.parent.size
+    BoxLayout:
+        id: boxLayout
+        size: self.parent.size
         canvas:
             Color:
                 rgba: 1, 1, 1, 1
             Rectangle:
                 id: rectid
-                pos: self.pos
-                size: root.size
+                pos: self.parent.pos
+                size: self.parent.size
+        
+<DrawingWidget>:
+    bgColor: [1, 0, 0, 1]
+    Draw:
+        id: layout
+        auto_bring_to_front: False
+        # canvas:
+        #     Color:
+        #         rgba: 1, 1, 1, 1
+        #     Rectangle:
+        #         id: rectid
+        #         pos: self.pos
+        #         size: root.size
 
 
 <LoadDialog>:
@@ -50,7 +65,16 @@
 <Interface>:
     orientation: 'vertical'
     ActionBar:
+        pos_hint: {'top':1}
     DrawingWidget:
-        id: draw_widget
+        id: draw_widget_left
+        size_hint: (1, 1)
+        bgColor: [0, 1, 1, 1]
+
+    # BoxLayout:
+    #     orientation: 'horizontal'
+        # DrawingWidget:
+        #     id: draw_widget_right
+        #     bgColor: [0, 0, 1, 1]
 
 
