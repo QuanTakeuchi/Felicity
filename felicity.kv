@@ -1,11 +1,14 @@
 <DrawingWidget>:
-    canvas:
-        Color:
-            rgba: 1, 1, 1, 1
-        Rectangle:
-            id: rect
-            pos: self.pos
-            size: (300, 300)
+    ResizableLayout:
+        id: layout
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                id: rectid
+                pos: self.pos
+                size: root.size
+
 
 <LoadDialog>:
     defaultPath: '.'

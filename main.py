@@ -5,6 +5,7 @@ from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.slider import Slider
 from kivy.uix.popup import Popup
+from kivy.uix.scatter import Scatter
 from kivy.graphics import Rectangle, Line, Color
 from kivy.properties import ListProperty, ObjectProperty, StringProperty
 from kivy.factory import Factory
@@ -24,11 +25,31 @@ class LoadDialog(FloatLayout):
 
 #################################################################################
 
+class ResizableLayout(Scatter):
+    def on_touch_down(self, touch):
+        # Override Scatter's `on_touch_down` behavior for mouse scroll
+        if touch.is_mouse_scrolling:
+            if touch.button == 'scrolldown':
+                if self.scale < 10:
+                    self.scale = self.scale * 1.1
+            elif touch.button == 'scrollup':
+                if self.scale > 1:
+                    self.scale = self.scale * 0.8
+        # If some other kind of "touch": Fall back on Scatter's behavior
+        else:
+            super(ResizableLayout, self).on_touch_down(touch)
+
+            
 class DrawingWidget(Widget):
     target_colour_rgb = ListProperty([0, 0, 0])
+    rectProperty = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
 
     def update(self, texture, width, height):
-        with self.canvas:
+        with self.ids.layout.canvas:
             Rectangle(texture=texture, pos=self.pos, size=(width, height))
 
     def on_touch_down(self, touch):
